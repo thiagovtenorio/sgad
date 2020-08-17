@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:tp = "http://java.sun.com/jsf/composite/menu"> 
+      <h:head>
+	    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" http-equiv="X-UA-Conpatible" />
+	    <h:outputStylesheet library="css" name="bootstrap.min.css" />     
+	    <title>Avaliação</title>
+	    <style type="text/css">
+	        .tableUpdated {
+	            width: 90% !important;
+	            margin: 17px 58px 0 !important;
+	        }
+	        .btnSpace {
+	            margin: 17px;
+	        }     
+	    </style>
+	</h:head>
+	
+	<h:body> 
+		<tp:menuSGAD />
+		<h:form class="form-horizontal"> 
+			<div class="form-group"> 
+				 <div class="col-sm-4">
+				 </div>
+				  <div class="col-sm-4"> 
+				  	 <h2>Avaliar Colaborador  </h2>
+				  </div>
+			</div>
+			 <hr/>
+			 <div class="form-group">
+			 	<h:outputLabel for="colaborador" class="control-label col-sm-4">Escolher colaborador:</h:outputLabel>
+			 	<div class="col-sm-2">
+			 		<h:inputText id="colaborador" class="form-control">
+               		</h:inputText>
+			 	</div>
+			 	<div class="col-sm-1">
+			 		<p:commandButton icon="ui-icon-search" onclick="PF('dlg2').show();" >
+			 		</p:commandButton>
+			 	</div>
+			 </div>
+			 <div class="form-group"> 
+			 	 <h:outputLabel for="modelo" class="control-label col-sm-4">Escolher modelo:</h:outputLabel>
+			 	 <div class="col-sm-4">
+			 	 	<p:selectOneMenu id="modelo" value="#{autoAvaliacaoBean.autoAvaliacao.idModeloAvaliacao}">
+			 	  	 	<f:selectItems value="#{modeloAvaliacaoListBean.modeloAvaliacaoList}" var="modelo" itemLabel="#{modelo.nome}" itemValue="#{modelo.idModeloAvaliacao}"/>
+			 	  	 	<p:ajax listener="#{autoAvaliacaoBean.onModeloAvaliacaoChange}" update="avaliacao"/>
+			 	  	 </p:selectOneMenu>
+			 	 </div>
+			 </div>
+			 <div class="form-group">
+			 	<div class="col-sm-3"> 
+			 	
+			 	</div>
+			 	<div class="col-sm-9"> 	
+			 		<p:outputPanel id="avaliacao" style="width:50%;">		 	 
+				 	 	<p:repeat value="#{autoAvaliacaoBean.autoAvaliacao.competencias}" var="competencia"> 
+				 	 			<h:dataTable value="#{competencia.afirmativas}" var="afirmativa" class="table table-hover table-bordered tableUpdated">
+				 	 				<h:column >
+										<f:facet name="header">#{competencia.nome}: #{competencia.descricao}</f:facet>
+										<h:outputText value="#{afirmativa.descricao} "/>
+										<h:outputText value="(#{afirmativa.nome})" style="font-weight: bold"/>
+									</h:column>
+									<h:column>
+										<f:facet name="header">AVALIAÇÃO LIDERANÇA</f:facet>
+										<p:inputText value="#{afirmativa.nota.nota}" style="width:50px;"></p:inputText>
+									</h:column>
+				 	 			</h:dataTable>
+				 	 	</p:repeat>
+				 	 </p:outputPanel>
+			 	</div>
+			 	<hr/>
+			 	<div class="col-sm-10">
+			 		<center>
+			    		<h:commandButton action="#{autoAvaliacaoBean.finalizar()}" process="competenciasForm" value="Finalizar" class="btn btn-primary" />
+	        		</center>
+			 	</div>
+			 </div>
+		</h:form>
+		<p:dialog header="Escolher Colaborador" widgetVar="dlg2" height="200" width="500">
+			 <div class="form-group"> 
+			 	<h:outputLabel for="colaborador" class="control-label col-sm-4">Nome do colaborador :</h:outputLabel>
+			 	<div class="col-sm-8"> 
+			 		<p:inputText id="colaborador" class="form-control" value="#{usuarioBean.nomeColaborador}">
+			 			<p:ajax event="keyup" update="colaboradoresPanel" process="colaborador"/>
+            		</p:inputText>
+			 	</div>
+			 </div>
+			<div class="form-group">
+				<p:outputPanel id="colaboradoresPanel">
+					<h:dataTable value="#{usuarioBean.colaboradoresByNome}" var="colaborador" >
+		    			<h:column >
+		    				<f:facet name="header">Nome:</f:facet>
+		    				<h:outputText value="#{colaborador.nome} "/>
+		    			</h:column>
+		    		</h:dataTable>
+				</p:outputPanel>
+			</div>
+		</p:dialog>
+	</h:body>
+</html>
