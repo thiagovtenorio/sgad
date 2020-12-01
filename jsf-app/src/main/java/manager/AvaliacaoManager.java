@@ -73,7 +73,6 @@ public class AvaliacaoManager{
 		NotaAvaliacao nota=null;
 		for(Competencia competencia:avaliacao.getCompetencias()) {
 			for(Afirmativa afirmativa:competencia.getAfirmativas()) {
-				System.out.println("idModelo= "+avaliacao.getIdModeloAvaliacao()+ "idAvaliacao= "+avaliacao.getId()+" idAfirmativa= "+afirmativa.getId());
 				nota=notaAvaliacaoDAO.findNotaAvaliacaoById(avaliacao.getId(), afirmativa.getId());
 				afirmativa.setNota(nota);
 			}
